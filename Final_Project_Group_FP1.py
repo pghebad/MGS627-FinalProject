@@ -44,6 +44,23 @@ for item in result:
 
 #Defining a function to save properties data as csv.
 def save_as_csv():
+	"""
+	    Saves property data stored in a list to a CSV file.
+	    This function takes a predefined list (`main_list`) containing property details and
+	    creates a DataFrame using specified column names. The DataFrame is then saved as a
+	    CSV file named 'property_details.csv' without the index.
+
+	    Columns:
+	    - address: The address of the property.
+	    - zpid: Unique property identifier.
+	    - price: The price of the property.
+	    - bedrooms: Number of bedrooms in the property.
+	    - rentZestimate: Estimated rent value of the property.
+	    - livingArea: The living area of the property (in square feet).
+
+	    Returns:
+	        None
+	    """
 	#Creating a dataframe to store list data
 	properties_df = pd.DataFrame(main_list, columns = ['address', 'zpid', 'price', 'bedrooms', 'rentZestimate', 'livingArea'])
 
@@ -78,17 +95,39 @@ print(properties['rentZestimate'])
 #--------------------------Multiple Regression------------------------------
 #Function for multiple regression to make the decision whether to buy or rent the property
 def multiple_regression():
+	"""
+	    Performs a multiple regression analysis to predict annual rent income and provides
+	    investment advice on whether to buy or rent a property.
+
+	    The function modifies the 'rentZestimate' column in the `properties` DataFrame
+	    by multiplying it by 12 to calculate annual rent. It then fits a multiple regression
+	    model to predict 'rentZestimate' based on 'price', 'bedrooms', and 'livingArea'.
+	    The regression coefficients are analyzed to determine whether buying or renting
+	    the property is a better investment.
+
+	    Data Used:
+	    - rentZestimate: Annual estimated rent (modified by multiplying by 12).
+	    - price: The price of the property.
+	    - bedrooms: Number of bedrooms in the property.
+	    - livingArea: The living area of the property (in square feet).
+
+	    Decision Logic:
+	    - If the regression coefficient for 'price' is greater than that of 'livingArea',
+	      it suggests that property value has a stronger influence on rent, making buying
+	      the property a better investment for long-term capital appreciation.
+	    - If the regression coefficient for 'livingArea' is greater than that of 'price',
+	      it suggests that property size has a stronger influence on rent, making renting
+	      the property a better option.
+
+	    Returns:
+	        None
+	    """
 	properties['rentZestimate'] = properties['rentZestimate'] * 12
 	# Multiple Regression to predict 'rentZestimate' based on 'price', 'bedrooms', and 'livingArea'
 	model = ols('rentZestimate ~ price + bedrooms + livingArea', data=properties).fit()
 
 	# Print the regression parameters
 	print("Regression Parameters:\n", model.params)
-
-	# model.params['price'] > model.params['livingArea'] (Buy the property):
-	# If price has a higher influence on rent, it implies that purchasing property may lead to better investment (long-term capital appreciation).
-	# model.params['livingArea'] > model.params['price'] (Rent the property):
-	# If size has a higher influence on rent, renting a property might be a better choice, as rent prices are more closely tied to the size of the property
 
 	# Make the decision based on the regression analysis.
 	if model.params['price'] > model.params['livingArea']:
@@ -150,6 +189,26 @@ app.layout = html.Div([
 #Defining function to create different charts.
 #Function has one parameter price range which is used as filter for charts
 def update_plot(price_range):
+	"""
+	    Generates interactive charts to visualize property data based on a specified price range.
+
+	    This function filters the property dataset using the provided price range and creates
+	    four different visualizations to explore relationships and trends in the data:
+	    1. Scatter plot of price vs. living area.
+	    2. Bar chart of average price grouped by the number of bedrooms.
+	    3. Scatter plot of price vs. rent estimate.
+	    4. Histogram of the rent-to-price ratio distribution.
+
+	    Parameters:
+	        price_range (tuple): A tuple with two elements representing the minimum and maximum
+	                             price range.
+
+	    Returns:
+	        scatter_fig: Plotly scatter plot for price vs. living area.
+	        bar_fig: Plotly bar chart for average price by number of bedrooms.
+	        scatter_rent_fig: Plotly scatter plot for price vs. rent estimate.
+	        hist_fig: Plotly histogram for rent-to-price ratio distribution.
+	    """
 	#Filter data based on price range
 	filtered_data = properties[(properties['price'] >= price_range[0]) & (properties['price'] <= price_range[1])]
 
