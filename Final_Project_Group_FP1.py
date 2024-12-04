@@ -25,7 +25,7 @@ querystring = {"location":"Buffalo, NY","status_type":"ForSale","home_type":"Hou
 
 #Creating headers variable which contains required parameters: API key and host.
 headers = {
-	"x-rapidapi-key": "a3f41ca30fmshe057d7ba522a5cfp180ca1jsnc2cd5b413e7d",
+	"x-rapidapi-key": "api-key",
 	"x-rapidapi-host": "zillow-com1.p.rapidapi.com"
 }
 
