@@ -88,9 +88,6 @@ properties['address'].fillna('Unknown', inplace=True)
 #Grouping properties by bedrooms and filling missing values with group's mean.
 properties['rentZestimate'] = properties.groupby('bedrooms')['rentZestimate'].transform(
 	lambda x: x.fillna(x.mean()))
-print(properties[['price', 'rentZestimate']])
-
-print(properties['rentZestimate'])
 
 #--------------------------Multiple Regression------------------------------
 #Function for multiple regression to make the decision whether to buy or rent the property
